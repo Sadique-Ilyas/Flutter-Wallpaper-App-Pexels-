@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wallpaper_app/Widgets/Home%20Page%20Widgets.dart';
+import 'package:flutter_wallpaper_app/Widgets/Search%20Page%20Widgets.dart';
+import 'package:get/get.dart';
 
-class HomePage extends StatefulWidget {
+class SearchPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomePageWidgets.appBar(),
+        appBar: SearchPageWidgets.appBar(),
         body: Container(
           margin: EdgeInsets.only(right: 15, left: 15),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HomePageWidgets().textField(context),
+                SearchPageWidgets()
+                    .textField(context, Get.arguments.toString()),
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                    height: 40, child: HomePageWidgets.horizontalListView()),
-                SizedBox(
-                  height: 20,
-                ),
-                HomePageWidgets().staggeredGridView(),
+                SearchPageWidgets().staggeredGridView(Get.arguments.toString()),
                 // HomePageWidgets().prevNextPageButton(),
                 SizedBox(
                   height: 20,

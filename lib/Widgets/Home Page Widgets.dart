@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_wallpaper_app/Controllers/Trending%20Photo%20Controller.dart';
 import 'package:flutter_wallpaper_app/Screens/Details%20Page.dart';
+import 'package:flutter_wallpaper_app/Screens/Search%20Page.dart';
 import 'package:get/get.dart';
 
-class Widgets {
+class HomePageWidgets {
   // AppBar
   static Widget appBar() {
     return AppBar(
@@ -28,12 +29,35 @@ class Widgets {
   }
 
   //TextField
-  static Widget textField() {
+  TextEditingController controller = TextEditingController();
+  Widget textField(context) {
     return TextField(
+      textCapitalization: TextCapitalization.sentences,
+      controller: controller,
       style: TextStyle(fontSize: 14),
       decoration: InputDecoration(
+          suffixIcon: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Get.off(() => SearchPage(), arguments: controller.text);
+                  photoController.fetchSearchedPhotos(controller.text);
+                  controller.clear();
+                }),
+          ),
           hintText: "Search Wallpapers...",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
+      onSubmitted: (value) {
+        FocusScope.of(context).requestFocus(FocusNode());
+        Get.off(() => SearchPage(), arguments: controller.text);
+        photoController.fetchSearchedPhotos(controller.text);
+        controller.clear();
+      },
+      keyboardType: TextInputType.name,
+      textInputAction: TextInputAction.search,
+      autofocus: false,
     );
   }
 
@@ -54,17 +78,16 @@ class Widgets {
     );
   }
 
-  //GridView
+  //StaggeredGridView
   final TrendingPhotoController photoController =
       Get.put(TrendingPhotoController());
-  Widget gridView() {
+  Widget staggeredGridView() {
     return Obx(() {
       if (photoController.isLoading.value) {
         return Center(child: CircularProgressIndicator());
       } else {
         return StaggeredGridView.countBuilder(
             itemCount: photoController.photoList.length,
-            padding: EdgeInsets.all(10),
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
@@ -73,40 +96,50 @@ class Widgets {
             itemBuilder: (context, index) {
               return InkWell(
                   onTap: () {
-                    Get.to(DetailsPage(),
+                    Get.to(() => DetailsPage(),
                         arguments: photoController.photoList[index]);
                   },
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              "${photoController.photoList[index].src.medium}")));
+                      child: Hero(
+                        tag: photoController.photoList[index],
+                        child: CachedNetworkImage(
+                            imageUrl:
+                                "${photoController.photoList[index].src.medium}"),
+                      )));
             },
             staggeredTileBuilder: (index) {
               return StaggeredTile.fit(1);
             });
-        // return GridView.count(
-        //     shrinkWrap: true,
-        //     crossAxisCount: 2,
-        //     childAspectRatio: 0.6,
-        //     mainAxisSpacing: 6.0,
-        //     physics: ClampingScrollPhysics(),
-        //     crossAxisSpacing: 6.0,
-        //     children: photoController.photoList
-        //         .map((photo) => InkWell(
-        //               onTap: () {
-        //                 Get.to(DetailsPage(), arguments: photo);
-        //               },
-        //               child: ClipRRect(
-        //                 borderRadius: BorderRadius.circular(10),
-        //                 child: Image.network(
-        //                   photo.src.portrait,
-        //                   fit: BoxFit.cover,
-        //                 ),
-        //               ),
-        //             ))
-        //         .toList());
       }
     });
+  }
+
+  // Prev/Next Page Button
+  Widget prevNextPageButton() {
+    return Obx(() => photoController.page.value != 0
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              photoController.page.value != 1
+                  ? OutlineButton(
+                      onPressed: () {},
+                      child: Row(
+                        children: [
+                          Icon(Icons.navigate_before),
+                          Text('Prev Page')
+                        ],
+                      ),
+                    )
+                  : Container(),
+              OutlineButton(
+                onPressed: () {},
+                child: Row(
+                  children: [Text('Next Page'), Icon(Icons.navigate_next)],
+                ),
+              )
+            ],
+          )
+        : Container());
   }
 }

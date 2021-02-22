@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
                   height: 20,
                 ),
                 Container(
-                    height: 40, child: HomePageWidgets.horizontalListView()),
+                    height: 40, child: HomePageWidgets().horizontalListView()),
                 SizedBox(
                   height: 20,
                 ),

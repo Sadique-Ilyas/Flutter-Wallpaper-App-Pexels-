@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_wallpaper_app/Controllers/Trending%20Photo%20Controller.dart';
+import 'package:flutter_wallpaper_app/Controllers/Photo%20Controller.dart';
 import 'package:flutter_wallpaper_app/Screens/Details%20Page.dart';
 import 'package:get/get.dart';
 
@@ -10,19 +10,22 @@ class SearchPageWidgets {
   // AppBar
   static Widget appBar() {
     return AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Flutter ',
-            style: TextStyle(color: Colors.blue),
-          ),
-          Text(
-            'Wallpaper ',
-            style: TextStyle(color: Colors.black),
-          )
-        ],
-      ),
+      centerTitle: true,
+      title: RichText(
+          text: TextSpan(
+              text: "Flutter ",
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+              children: [
+            TextSpan(
+                text: "Wallpaper",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500))
+          ])),
       backgroundColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black),
@@ -43,15 +46,21 @@ class SearchPageWidgets {
             child: IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
+                  if (controller.text.isNotEmpty) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    photoController.fetchSearchedPhotos(controller.text);
+                  }
                   FocusScope.of(context).requestFocus(FocusNode());
-                  photoController.fetchSearchedPhotos(controller.text);
                 }),
           ),
           hintText: "Search Wallpapers...",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
       onSubmitted: (value) {
+        if (controller.text.isNotEmpty) {
+          FocusScope.of(context).requestFocus(FocusNode());
+          photoController.fetchSearchedPhotos(value);
+        }
         FocusScope.of(context).requestFocus(FocusNode());
-        photoController.fetchSearchedPhotos(controller.text);
       },
       keyboardType: TextInputType.name,
       textInputAction: TextInputAction.search,
@@ -60,9 +69,9 @@ class SearchPageWidgets {
   }
 
   //StaggeredGridView
-  final TrendingPhotoController photoController =
-      Get.put(TrendingPhotoController());
-  Widget staggeredGridView(String keyword) {
+  String searchKey;
+  final PhotoController photoController = Get.put(PhotoController());
+  Widget staggeredGridView() {
     return Obx(() {
       if (photoController.isLoading.value) {
         return Center(child: CircularProgressIndicator());
@@ -71,7 +80,7 @@ class SearchPageWidgets {
       } else {
         return Column(
           children: [
-            Text('Search Results for \"$keyword\"'),
+            Text('Search Results for \"${photoController.searchKey}\"'),
             StaggeredGridView.countBuilder(
                 itemCount: photoController.searchList.length,
                 padding: EdgeInsets.all(10),
@@ -105,30 +114,30 @@ class SearchPageWidgets {
   }
 
   // Prev/Next Page Button
-  Widget prevNextPageButton() {
-    return Obx(() => photoController.page.value != 0
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              photoController.page.value != 1
-                  ? OutlineButton(
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          Icon(Icons.navigate_before),
-                          Text('Prev Page')
-                        ],
-                      ),
-                    )
-                  : Container(),
-              OutlineButton(
-                onPressed: () {},
-                child: Row(
-                  children: [Text('Next Page'), Icon(Icons.navigate_next)],
-                ),
-              )
-            ],
-          )
-        : Container());
-  }
+  // Widget prevNextPageButton() {
+  //   return Obx(() => photoController.page.value != 0
+  //       ? Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //           children: [
+  //             photoController.page.value != 1
+  //                 ? OutlineButton(
+  //                     onPressed: () {},
+  //                     child: Row(
+  //                       children: [
+  //                         Icon(Icons.navigate_before),
+  //                         Text('Prev Page')
+  //                       ],
+  //                     ),
+  //                   )
+  //                 : Container(),
+  //             OutlineButton(
+  //               onPressed: () {},
+  //               child: Row(
+  //                 children: [Text('Next Page'), Icon(Icons.navigate_next)],
+  //               ),
+  //             )
+  //           ],
+  //         )
+  //       : Container());
+  // }
 }

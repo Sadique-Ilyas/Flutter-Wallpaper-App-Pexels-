@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
                 SizedBox(
                   height: 20,
                 ),
-                SearchPageWidgets().staggeredGridView(Get.arguments.toString()),
+                SearchPageWidgets().staggeredGridView(),
                 // HomePageWidgets().prevNextPageButton(),
                 SizedBox(
                   height: 20,

@@ -146,7 +146,15 @@ class DetailsPageWidgets {
               height: 10,
             ),
             OutlineButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.back();
+                DownloadingServices.askPermission(photo.src.original);
+                // Get.snackbar("Downloading...", "Downloading in Progress",
+                //     icon: Icon(Icons.file_download),
+                //     dismissDirection: SnackDismissDirection.HORIZONTAL);
+              },
+              borderSide:
+                  BorderSide(color: Colors.blue, style: BorderStyle.solid),
               child: Text(
                 ' Download ',
                 style: TextStyle(color: Colors.blue),

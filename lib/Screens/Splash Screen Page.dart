@@ -1,14 +1,9 @@
 import 'dart:async';
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_wallpaper_app/Controllers/Photo%20Controller.dart';
 import 'package:flutter_wallpaper_app/Screens/Home%20Page.dart';
 import 'package:flutter_wallpaper_app/Screens/Intro%20Screen%20Page.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:after_layout/after_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:page_transition/page_transition.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override

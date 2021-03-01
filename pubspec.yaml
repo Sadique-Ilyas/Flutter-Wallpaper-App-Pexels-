@@ -34,6 +34,12 @@ dependencies:
   flutter_downloader:
   path_provider:
   permission_handler:
+  animated_splash_screen:
+  splashscreen:
+  introduction_screen:
+  shared_preferences:
+  after_layout: ^1.0.7+2
+  flutter_spinkit:
 
 dev_dependencies:
   flutter_test:

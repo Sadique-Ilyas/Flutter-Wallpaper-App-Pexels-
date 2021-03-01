@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_wallpaper_app/Controllers/Photo%20Controller.dart';
 import 'package:flutter_wallpaper_app/Screens/Details%20Page.dart';
@@ -48,7 +49,9 @@ class CategoryPageWidgets {
                   if (controller.text.isNotEmpty) {
                     FocusScope.of(context).requestFocus(FocusNode());
                     Get.off(() => SearchPage(), arguments: controller.text);
-                    photoController.fetchSearchedPhotos(controller.text);
+                    var url =
+                        "https://api.pexels.com/v1/search?query=${controller.text}&per_page=50";
+                    photoController.fetchSearchedPhotos(url, controller.text);
                     controller.clear();
                   }
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -59,8 +62,9 @@ class CategoryPageWidgets {
       onSubmitted: (value) {
         if (controller.text.isNotEmpty) {
           FocusScope.of(context).requestFocus(FocusNode());
-          Get.off(() => SearchPage(), arguments: value);
-          photoController.fetchSearchedPhotos(value);
+          Get.off(() => SearchPage(), arguments: controller.text);
+          var url = "https://api.pexels.com/v1/search?query=$value&per_page=50";
+          photoController.fetchSearchedPhotos(url, value);
           controller.clear();
         }
         FocusScope.of(context).requestFocus(FocusNode());
@@ -76,7 +80,9 @@ class CategoryPageWidgets {
   Widget staggeredGridView() {
     return Obx(() {
       if (photoController.isLoading.value) {
-        return Center(child: CircularProgressIndicator());
+        return SpinKitRipple(
+          color: Colors.blue,
+        );
       } else {
         return Column(
           children: [
@@ -111,6 +117,11 @@ class CategoryPageWidgets {
         );
       }
     });
+  }
+
+  Future<void> nextPage() async {
+    return await photoController.fetchCategoryPhotos(
+        photoController.categoryNextPageUrl, photoController.categoryKey.value);
   }
 
   // Prev/Next Page Button

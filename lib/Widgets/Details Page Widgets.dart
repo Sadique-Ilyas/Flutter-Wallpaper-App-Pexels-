@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_wallpaper_app/Models/Trending%20Wallpaper%20Model.dart';
+import 'package:flutter_wallpaper_app/Models/Wallpaper%20Model.dart';
 import 'package:flutter_wallpaper_app/Services/Downloading%20Services.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +20,8 @@ class DetailsPageWidgets {
     );
   }
 
-  static showBottomSheets(Photo photo) async {
+  String taskId;
+  showBottomSheets(Photo photo) async {
     await Get.bottomSheet(
       Container(
         padding: EdgeInsets.all(10),
@@ -145,24 +146,29 @@ class DetailsPageWidgets {
             SizedBox(
               height: 10,
             ),
-            OutlineButton(
-              onPressed: () {
-                Get.back();
-                DownloadingServices.askPermission(photo.src.original);
-                // Get.snackbar("Downloading...", "Downloading in Progress",
-                //     icon: Icon(Icons.file_download),
-                //     dismissDirection: SnackDismissDirection.HORIZONTAL);
-              },
-              borderSide:
-                  BorderSide(color: Colors.blue, style: BorderStyle.solid),
-              child: Text(
-                ' Download ',
-                style: TextStyle(color: Colors.blue),
+            SizedBox(
+              width: double.infinity,
+              child: OutlineButton(
+                onPressed: () async {
+                  Get.back();
+                  taskId = await DownloadingServices.askPermission(
+                      photo.src.original);
+                  Get.snackbar("Downloading...", "Check the Notification Panel",
+                      icon: Icon(Icons.file_download),
+                      backgroundColor: Colors.white,
+                      dismissDirection: SnackDismissDirection.HORIZONTAL);
+                },
+                borderSide:
+                    BorderSide(color: Colors.blue, style: BorderStyle.solid),
+                child: Text(
+                  ' Download Image ',
+                  style: TextStyle(color: Colors.blue),
+                ),
+                splashColor: Colors.green,
               ),
-              splashColor: Colors.green,
             ),
             SizedBox(
-              height: 60,
+              height: 20,
             )
           ],
         ),

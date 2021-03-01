@@ -7,14 +7,16 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DownloadingServices {
-  static askPermission(String url) async {
+  static Future<String> askPermission(String url) async {
     final status = await Permission.storage.request();
+    String taskId;
     if (status.isGranted) {
       final directory = await getDirectory();
-      final taskId = await downloadFile(directory, url);
+      taskId = await downloadFile(directory, url);
     } else {
       Fluttertoast.showToast(msg: "Grant Permissions for Downloading");
     }
+    return taskId;
   }
 
   static Future<Directory> getDirectory() async {

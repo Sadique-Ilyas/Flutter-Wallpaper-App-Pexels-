@@ -12,22 +12,26 @@ class _CategoryPageState extends State<CategoryPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: CategoryPageWidgets.appBar(),
-        body: Container(
-          margin: EdgeInsets.only(right: 15, left: 15),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                CategoryPageWidgets()
-                    .textField(context),
-                SizedBox(
-                  height: 20,
-                ),
-                CategoryPageWidgets().staggeredGridView(),
-                // HomePageWidgets().prevNextPageButton(),
-                SizedBox(
-                  height: 20,
-                )
-              ],
+        body: RefreshIndicator(
+          onRefresh: () {
+            return CategoryPageWidgets().nextPage();
+          },
+          child: Container(
+            margin: EdgeInsets.only(right: 15, left: 15),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CategoryPageWidgets().textField(context),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CategoryPageWidgets().staggeredGridView(),
+                  // HomePageWidgets().prevNextPageButton(),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
           ),
         ));

@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-TrendingWallpaperModel trendingWallpaperModelFromJson(String str) => TrendingWallpaperModel.fromJson(json.decode(str));
+WallpaperModel trendingWallpaperModelFromJson(String str) => WallpaperModel.fromJson(json.decode(str));
 
-String trendingWallpaperModelToJson(TrendingWallpaperModel data) => json.encode(data.toJson());
+String trendingWallpaperModelToJson(WallpaperModel data) => json.encode(data.toJson());
 
-class TrendingWallpaperModel {
-    TrendingWallpaperModel({
+class WallpaperModel {
+    WallpaperModel({
         this.page,
         this.perPage,
         this.photos,
@@ -23,7 +23,7 @@ class TrendingWallpaperModel {
     int totalResults;
     String nextPage;
 
-    factory TrendingWallpaperModel.fromJson(Map<String, dynamic> json) => TrendingWallpaperModel(
+    factory WallpaperModel.fromJson(Map<String, dynamic> json) => WallpaperModel(
         page: json["page"],
         perPage: json["per_page"],
         photos: List<Photo>.from(json["photos"].map((x) => Photo.fromJson(x))),

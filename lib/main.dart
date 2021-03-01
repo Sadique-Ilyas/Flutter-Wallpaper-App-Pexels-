@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_wallpaper_app/Screens/Home%20Page.dart';
+import 'package:flutter_wallpaper_app/Screens/Splash%20Screen%20Page.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -16,12 +17,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Wallpaper App',
+        title: 'Flutter Pexels',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomePage());
+        home: SplashScreenPage());
   }
 }

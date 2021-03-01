@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_wallpaper_app/Controllers/Photo%20Controller.dart';
 import 'package:flutter_wallpaper_app/Screens/Details%20Page.dart';
@@ -33,8 +34,8 @@ class SearchPageWidgets {
   }
 
   //TextField
-  TextEditingController controller = TextEditingController();
   Widget textField(context, String value) {
+    TextEditingController controller = TextEditingController();
     controller.text = value;
     return TextField(
       textCapitalization: TextCapitalization.sentences,
@@ -48,7 +49,9 @@ class SearchPageWidgets {
                 onPressed: () {
                   if (controller.text.isNotEmpty) {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    photoController.fetchSearchedPhotos(controller.text);
+                    var url =
+                        "https://api.pexels.com/v1/search?query=${controller.text}&per_page=50";
+                    photoController.fetchSearchedPhotos(url, controller.text);
                   }
                   FocusScope.of(context).requestFocus(FocusNode());
                 }),
@@ -58,7 +61,8 @@ class SearchPageWidgets {
       onSubmitted: (value) {
         if (controller.text.isNotEmpty) {
           FocusScope.of(context).requestFocus(FocusNode());
-          photoController.fetchSearchedPhotos(value);
+          var url = "https://api.pexels.com/v1/search?query=$value&per_page=50";
+          photoController.fetchSearchedPhotos(url, value);
         }
         FocusScope.of(context).requestFocus(FocusNode());
       },
@@ -69,12 +73,13 @@ class SearchPageWidgets {
   }
 
   //StaggeredGridView
-  String searchKey;
   final PhotoController photoController = Get.put(PhotoController());
   Widget staggeredGridView() {
     return Obx(() {
       if (photoController.isLoading.value) {
-        return Center(child: CircularProgressIndicator());
+        return SpinKitRipple(
+          color: Colors.blue,
+        );
       } else if (photoController.searchList.isEmpty) {
         return Text("No Search Results. Try using any other keyword.");
       } else {
@@ -111,6 +116,11 @@ class SearchPageWidgets {
         );
       }
     });
+  }
+
+  Future<void> nextPage() async {
+    return await photoController.fetchSearchedPhotos(
+        photoController.searchNextPageUrl, photoController.searchKey.value);
   }
 
   // Prev/Next Page Button

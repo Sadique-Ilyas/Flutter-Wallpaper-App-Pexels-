@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wallpaper_app/Models/Trending%20Wallpaper%20Model.dart';
+import 'package:flutter_wallpaper_app/Models/Wallpaper%20Model.dart';
 import 'package:flutter_wallpaper_app/Widgets/Details%20Page%20Widgets.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +24,7 @@ class _DetailsPageState extends State<DetailsPage> {
         DetailsPageWidgets.backgroundImage(photo),
         InkWell(
           onTap: () async {
-            await DetailsPageWidgets.showBottomSheets(photo);
+            await DetailsPageWidgets().showBottomSheets(photo);
           },
           child: Container(
             alignment: Alignment.bottomCenter,
